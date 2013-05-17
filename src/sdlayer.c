@@ -390,18 +390,18 @@ const char *getjoyname(int what, int num)
 
 	switch (what) {
 		case 0:	// axis
-			if ((unsigned)num > (unsigned)joynumaxes) return NULL;
-			sprintf(tmp,"Axis %d",num);
+			if ((unsigned)num >= (unsigned)joynumaxes) return NULL;
+			sprintf(tmp,"Axis %d",num+1);
 			return tmp;
 
 		case 1: // button
-			if ((unsigned)num > (unsigned)joynumbuttons) return NULL;
-			sprintf(tmp,"Button %d",num);
+			if ((unsigned)num >= (unsigned)joynumbuttons) return NULL;
+			sprintf(tmp,"Button %d",num+1);
 			return tmp;
 
 		case 2: // hat
-			if ((unsigned)num > (unsigned)joynumhats) return NULL;
-			sprintf(tmp,"Hat %d",num);
+			if ((unsigned)num >= (unsigned)joynumhats) return NULL;
+			sprintf(tmp,"Hat %d",num+1);
 			return tmp;
 
 		default:
@@ -506,23 +506,6 @@ void readmousebstatus(int *b)
 	if (!mouseacquired || !appactive || !moustat) *b = 0;
 	else *b = mouseb;
 }
-
-//
-// setjoydeadzone() -- sets the dead and saturation zones for the joystick
-//
-void setjoydeadzone(int axis, unsigned short dead, unsigned short satur)
-{
-}
-
-
-//
-// getjoydeadzone() -- gets the dead and saturation zones for the joystick
-//
-void getjoydeadzone(int axis, unsigned short *dead, unsigned short *satur)
-{
-	*dead = *satur = 0;
-}
-
 
 //
 // releaseallbuttons()
@@ -1282,7 +1265,7 @@ int handleevents(void)
 
 			case SDL_JOYAXISMOTION:
 				if (appactive && ev.jaxis.axis < joynumaxes)
-					joyaxis[ ev.jaxis.axis ] = ev.jaxis.value * 10000 / 32767;
+					joyaxis[ ev.jaxis.axis ] = ev.jaxis.value;
 				break;
 
 			case SDL_JOYHATMOTION: {
